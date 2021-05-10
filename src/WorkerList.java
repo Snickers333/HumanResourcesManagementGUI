@@ -1,0 +1,2 @@
+public class WorkerList {
+}
