@@ -1,4 +1,7 @@
 public class Worker {
+    private static int counter = 1;
+
+    private int id;
     private String firstName;
     private String lastName;
     private Position position;
@@ -11,6 +14,20 @@ public class Worker {
         this.position = position;
         this.experience = experience;
         this.salary = salary;
+        this.id = counter;
+        counter++;
+    }
+
+    public Object[] getArrayFromWorker() {
+        return new Object[]{id, firstName, lastName, position, experience, salary};
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -55,7 +72,8 @@ public class Worker {
 
     @Override
     public String toString() {
-        return "FirstName='" + firstName + '\'' +
+        return "ID=" + id +
+                ", FirstName='" + firstName + '\'' +
                 ", LastName='" + lastName + '\'' +
                 ", Position=" + position +
                 ", Experience=" + experience +
