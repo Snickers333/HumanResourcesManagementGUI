@@ -12,6 +12,7 @@ public class GUIWorkerList extends JFrame {
     public GUIWorkerList(Object[][] workerList) {
         table = new JTable(workerList ,headers);
 
+        // Back to menu Button
         JButton backButton = new JButton("Back to menu");
         backButton.addActionListener(new ActionListener() {
             @Override
@@ -28,6 +29,8 @@ public class GUIWorkerList extends JFrame {
         setContentPane(panel);
         setVisible(true);
         setSize(800, 600);
+
+        // On Frame close - Back to menu
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
