@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class GUIWorkerList extends JFrame {
     private static String[] headers = {"ID", "First Name", "Last Name", "Position", "Experience", "Salary"};
@@ -19,7 +21,6 @@ public class GUIWorkerList extends JFrame {
             }
         });
 
-
         panel = new JPanel();
         panel.add(table);
         panel.add(backButton);
@@ -27,6 +28,12 @@ public class GUIWorkerList extends JFrame {
         setContentPane(panel);
         setVisible(true);
         setSize(800, 600);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                GUI.startGUI();
+                dispose();
+            }
+        });
     }
 }
