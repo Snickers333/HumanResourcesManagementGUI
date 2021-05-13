@@ -1,17 +1,17 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class GUIWorkerList extends JFrame {
-    private static String[] headers = {"ID", "First Name", "Last Name", "Position", "Experience", "Salary"};
     private JTable table;
     private JPanel panel;
 
-    public GUIWorkerList(Object[][] workerList) {
-        table = new JTable(workerList ,headers);
-
+    public GUIWorkerList(WorkerModel workerModel) {
+        super("Worker List");
+        table = new JTable(workerModel);
         // Back to menu Button
         JButton backButton = new JButton("Back to menu");
         backButton.addActionListener(new ActionListener() {
@@ -22,13 +22,20 @@ public class GUIWorkerList extends JFrame {
             }
         });
 
+        JScrollPane scroll = new JScrollPane(table);
+        scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+
         panel = new JPanel();
-        panel.add(table);
+        panel.add(scroll);
         panel.add(backButton);
+        panel.setLayout(new FlowLayout());
 
         setContentPane(panel);
         setVisible(true);
-        setSize(800, 600);
+        Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
+        setLocation(screenDim.width / 2, screenDim.height / 4);
+        pack();
 
         // On Frame close - Back to menu
         addWindowListener(new WindowAdapter() {
