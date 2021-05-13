@@ -22,14 +22,24 @@ public class GUI {
             }
         });
 
+        JButton addEmpButton = new JButton("Add Employee");
+        addEmpButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new GUIAdd(workerModel);
+            }
+        });
+
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
         mainPanel.add(showListButton);
+        mainPanel.add(addEmpButton);
+
         mainFrame.setContentPane(mainPanel);
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
-        mainFrame.setLocation(screenDim.width / 2, screenDim.height / 4);
+        mainFrame.setLocation(screenDim.width / 3, screenDim.height / 4);
         mainFrame.setSize(800, 600);
         mainFrame.setVisible(true);
     }

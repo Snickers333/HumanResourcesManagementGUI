@@ -25,6 +25,7 @@ public class Worker {
         this.experience = experience;
         this.salary = salary;
         this.id = id;
+        counter++;
     }
 
     public Object[] getArrayFromWorker() {

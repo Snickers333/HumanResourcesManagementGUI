@@ -34,7 +34,7 @@ public class GUIWorkerList extends JFrame {
         setContentPane(panel);
         setVisible(true);
         Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation(screenDim.width / 2, screenDim.height / 4);
+        setLocation(screenDim.width / 3, screenDim.height / 4);
         pack();
 
         // On Frame close - Back to menu
