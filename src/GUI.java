@@ -11,6 +11,10 @@ public class GUI {
     public static void startGUI() {
         WorkerModel workerModel = WorkerModel.getWorkerListFromFile();
 
+        showGUI(workerModel);
+    }
+
+    static void showGUI(WorkerModel workerModel) {
         JFrame mainFrame = new JFrame("Menu");
         // Button showing another JFrame with list of all Employees
         JButton showListButton = new JButton("Show Employee List");
@@ -30,11 +34,21 @@ public class GUI {
             }
         });
 
+        JButton saveButton = new JButton("Save Employee List");
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                workerModel.saveWorkerListToFile();
+                JOptionPane.showMessageDialog(mainFrame,"Successfully saved !");
+            }
+        });
+
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
         mainPanel.add(showListButton);
         mainPanel.add(addEmpButton);
+        mainPanel.add(saveButton);
 
         mainFrame.setContentPane(mainPanel);
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

@@ -17,7 +17,7 @@ public class GUIWorkerList extends JFrame {
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GUI.startGUI();
+                GUI.showGUI(workerModel);
                 dispose();
             }
         });
@@ -41,7 +41,7 @@ public class GUIWorkerList extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                GUI.startGUI();
+                GUI.showGUI(workerModel);
                 dispose();
             }
         });
