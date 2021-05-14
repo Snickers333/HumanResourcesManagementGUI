@@ -15,5 +15,7 @@ public class GUIAdd {
 
         Worker worker = new Worker(name, lastName, position, exp, salary);
         workerModel.addWorker(worker);
+
+        JOptionPane.showMessageDialog(frame, "Employee Successfully Added !");
     }
 }

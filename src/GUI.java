@@ -9,7 +9,8 @@ public class GUI {
     }
 
     public static void startGUI() {
-        WorkerModel workerModel = WorkerModel.getWorkerListFromFile();
+        WorkerModel workerModel = new WorkerModel();
+        workerModel.getWorkerListFromFile();
 
         showGUI(workerModel);
     }
@@ -47,13 +48,15 @@ public class GUI {
         loadButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                workerModel.removeAll();
+                workerModel.getWorkerListFromFile(WorkerModel.getSelectedFile());
             }
         });
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
+        mainPanel.add(loadButton);
         mainPanel.add(showListButton);
         mainPanel.add(addEmpButton);
         mainPanel.add(saveButton);

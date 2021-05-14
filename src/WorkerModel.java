@@ -23,22 +23,20 @@ public class WorkerModel extends AbstractTableModel {
         return new ArrayList<>(this.list);
     }
 
-    public static WorkerModel getWorkerListFromFile() {
+    public void getWorkerListFromFile() {
         JFrame frame = new JFrame();
-        WorkerModel workerModel = new WorkerModel();
         File file = new File("Data.txt");
         try {
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
-                workerModel.addWorker(Worker.getWorkerFromStringArray(scanner.nextLine().split(",")));
+                this.addWorker(Worker.getWorkerFromStringArray(scanner.nextLine().split(",")));
             }
         } catch (FileNotFoundException e) {
             int decision = JOptionPane.showConfirmDialog(frame, "Data file has not been found !" + '\n' + "Do you want to point to another file ?");
             if (decision == JOptionPane.YES_OPTION) {
-                    return getWorkerListFromFile(getSelectedFile());
+                    getWorkerListFromFile(getSelectedFile());
                 }
-        }
-        return workerModel;
+        };
     }
     // Method to choose a specific file
     public static File getSelectedFile() {
@@ -51,17 +49,15 @@ public class WorkerModel extends AbstractTableModel {
         return null;
     }
 
-    public static WorkerModel getWorkerListFromFile(File file) {
-        WorkerModel workerModel = new WorkerModel();
+    public void getWorkerListFromFile(File file) {
         try {
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
-                workerModel.addWorker(Worker.getWorkerFromStringArray(scanner.nextLine().split(",")));
+                this.addWorker(Worker.getWorkerFromStringArray(scanner.nextLine().split(",")));
             }
         } catch (FileNotFoundException e) {
             System.out.println("Error");
         }
-        return workerModel;
     }
 
     public void saveWorkerListToFile() {
@@ -82,6 +78,10 @@ public class WorkerModel extends AbstractTableModel {
             tmp[i] = list.get(i).getArrayFromWorker();
         }
         return tmp;
+    }
+
+    public void removeAll() {
+        this.list = new ArrayList<>();
     }
 
     @Override
