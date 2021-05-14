@@ -43,6 +43,14 @@ public class GUI {
             }
         });
 
+        JButton loadButton = new JButton("Load Employee List");
+        loadButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
