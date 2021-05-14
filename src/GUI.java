@@ -9,20 +9,21 @@ public class GUI {
     }
 
     public static void startGUI() {
-        WorkerModel workerModel = new WorkerModel();
-        workerModel.getWorkerListFromFile();
+        EmpModel empModel = new EmpModel();
+        empModel.getEmpListFromFile();
 
-        showGUI(workerModel);
+        showGUI(empModel);
     }
 
-    static void showGUI(WorkerModel workerModel) {
+    static void showGUI(EmpModel empModel) {
         JFrame mainFrame = new JFrame("Menu");
         // Button showing another JFrame with list of all Employees
         JButton showListButton = new JButton("Show Employee List");
+
         showListButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GUIWorkerList(workerModel);
+                new GUIEmpList(empModel, 0);
                 mainFrame.dispose();
             }
         });
@@ -31,7 +32,7 @@ public class GUI {
         addEmpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GUIAdd(workerModel);
+                new GUIAdd(empModel);
             }
         });
 
@@ -39,7 +40,7 @@ public class GUI {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                workerModel.saveWorkerListToFile();
+                empModel.saveEmpListToFile();
                 JOptionPane.showMessageDialog(mainFrame,"Successfully saved !");
             }
         });
@@ -48,18 +49,37 @@ public class GUI {
         loadButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                workerModel.removeAll();
-                workerModel.getWorkerListFromFile(WorkerModel.getSelectedFile());
+                empModel.removeAll();
+                empModel.getEmpListFromFile(EmpModel.getSelectedFile());
+            }
+        });
+
+        JButton editEmpButton = new JButton("Edit Employee");
+        editEmpButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        JButton removeEmpButton = new JButton("Remove Employee");
+        removeEmpButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                JOptionPane.showMessageDialog(mainFrame,"Employee has beed removed");
             }
         });
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        mainPanel.add(loadButton);
         mainPanel.add(showListButton);
         mainPanel.add(addEmpButton);
+        mainPanel.add(editEmpButton);
+        mainPanel.add(removeEmpButton);
         mainPanel.add(saveButton);
+        mainPanel.add(loadButton);
 
         mainFrame.setContentPane(mainPanel);
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

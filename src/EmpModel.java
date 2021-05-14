@@ -6,35 +6,35 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class WorkerModel extends AbstractTableModel {
+public class EmpModel extends AbstractTableModel {
     private String[] headers = {"ID", "First Name", "Last Name", "Position", "Experience", "Salary"};
 
-    private List<Worker> list;
+    private List<Employee> list;
 
-    public WorkerModel() {
+    public EmpModel() {
         this.list = new ArrayList<>();
     }
 
-    public void addWorker(Worker p) {
-        list.add(p);
+    public void addEmp(Employee e) {
+        list.add(e);
     }
 
-    public List<Worker> getWorkerList() {
+    public List<Employee> getEmpList() {
         return new ArrayList<>(this.list);
     }
 
-    public void getWorkerListFromFile() {
+    public void getEmpListFromFile() {
         JFrame frame = new JFrame();
         File file = new File("Data.txt");
         try {
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
-                this.addWorker(Worker.getWorkerFromStringArray(scanner.nextLine().split(",")));
+                this.addEmp(Employee.getEmpFromStringArray(scanner.nextLine().split(",")));
             }
         } catch (FileNotFoundException e) {
             int decision = JOptionPane.showConfirmDialog(frame, "Data file has not been found !" + '\n' + "Do you want to point to another file ?");
             if (decision == JOptionPane.YES_OPTION) {
-                    getWorkerListFromFile(getSelectedFile());
+                    getEmpListFromFile(getSelectedFile());
                 }
         };
     }
@@ -49,22 +49,23 @@ public class WorkerModel extends AbstractTableModel {
         return null;
     }
 
-    public void getWorkerListFromFile(File file) {
+    public void getEmpListFromFile(File file) {
         try {
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
-                this.addWorker(Worker.getWorkerFromStringArray(scanner.nextLine().split(",")));
+                this.addEmp(Employee.getEmpFromStringArray(scanner.nextLine().split(",")));
             }
         } catch (FileNotFoundException e) {
             System.out.println("Error");
         }
+        JOptionPane.showMessageDialog(null,"Data Loaded !");
     }
 
-    public void saveWorkerListToFile() {
+    public void saveEmpListToFile() {
         try {
             FileWriter fw = new FileWriter("Data.txt");
-            for (Worker worker : list) {
-                fw.write(worker.toString() + "\n");
+            for (Employee emp : list) {
+                fw.write(emp.toString() + "\n");
             }
             fw.close();
         } catch (IOException e) {
@@ -72,12 +73,17 @@ public class WorkerModel extends AbstractTableModel {
         }
     }
 
-    public Object[][] getWorkerArray() {
+    public Object[][] getEmpArray() {
         Object[][] tmp = new Object[this.list.size()][list.get(0).getArrayFromWorker().length];
         for (int i = 0; i < this.list.size(); i++) {
             tmp[i] = list.get(i).getArrayFromWorker();
         }
         return tmp;
+    }
+
+
+    public void removeEmp(int i) {
+        this.list.remove(i);
     }
 
     public void removeAll() {
@@ -121,25 +127,25 @@ public class WorkerModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Worker worker = list.get(rowIndex);
+        Employee emp = list.get(rowIndex);
         switch (columnIndex) {
             case 0 -> {
-                return worker.getId();
+                return emp.getId();
             }
             case 1 -> {
-                return worker.getFirstName();
+                return emp.getFirstName();
             }
             case 2 -> {
-                return worker.getLastName();
+                return emp.getLastName();
             }
             case 3 -> {
-                return worker.getPosition();
+                return emp.getPosition();
             }
             case 4 -> {
-                return worker.getExperience();
+                return emp.getExperience();
             }
             case 5 -> {
-                return worker.getSalary();
+                return emp.getSalary();
             }
         }
         return null;

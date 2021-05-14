@@ -1,4 +1,4 @@
-public class Worker {
+public class Employee {
     private static int counter = 1;
 
     private int id;
@@ -8,7 +8,7 @@ public class Worker {
     private int experience;
     private int salary;
 
-    public Worker(String firstName, String lastName, Position position, int experience, int salary) {
+    public Employee(String firstName, String lastName, Position position, int experience, int salary) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.position = position;
@@ -18,7 +18,7 @@ public class Worker {
         counter++;
     }
 
-    public Worker(int id, String firstName, String lastName, Position position, int experience, int salary) {
+    public Employee(int id, String firstName, String lastName, Position position, int experience, int salary) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.position = position;
@@ -32,8 +32,8 @@ public class Worker {
         return new Object[]{id, firstName, lastName, position, experience, salary};
     }
 
-    public static Worker getWorkerFromStringArray(String[] arr) {
-        return new Worker(Integer.parseInt(arr[0]), arr[1], arr[2], Position.valueOf(arr[3]), Integer.parseInt(arr[4]),Integer.parseInt(arr[5]));
+    public static Employee getEmpFromStringArray(String[] arr) {
+        return new Employee(Integer.parseInt(arr[0]), arr[1], arr[2], Position.valueOf(arr[3]), Integer.parseInt(arr[4]),Integer.parseInt(arr[5]));
     }
 
     public int getId() {

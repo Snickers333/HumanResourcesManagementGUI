@@ -1,10 +1,8 @@
-import jdk.jshell.spi.ExecutionControl;
-
 import javax.swing.*;
 
 public class GUIAdd {
     private JFrame frame;
-    public GUIAdd(WorkerModel workerModel) {
+    public GUIAdd(EmpModel empModel) {
         frame = new JFrame();
 
         String name = (JOptionPane.showInputDialog(frame, "Enter First Name"));
@@ -13,8 +11,8 @@ public class GUIAdd {
         int exp = Integer.parseInt(JOptionPane.showInputDialog(frame, "Enter Experience"));
         int salary = Integer.parseInt(JOptionPane.showInputDialog(frame, " Enter Salary"));
 
-        Worker worker = new Worker(name, lastName, position, exp, salary);
-        workerModel.addWorker(worker);
+        Employee worker = new Employee(name, lastName, position, exp, salary);
+        empModel.addEmp(worker);
 
         JOptionPane.showMessageDialog(frame, "Employee Successfully Added !");
     }

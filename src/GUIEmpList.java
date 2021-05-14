@@ -5,19 +5,19 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class GUIWorkerList extends JFrame {
+public class GUIEmpList extends JFrame {
     private JTable table;
     private JPanel panel;
 
-    public GUIWorkerList(WorkerModel workerModel) {
-        super("Worker List");
-        table = new JTable(workerModel);
-        // Back to menu Button
+    public GUIEmpList(EmpModel empModel, int mode) { // MODE 0 - Show List / MODE 1 - Edit Employee / MODE 2 - Remove Employee
+        super("Employee List");
+        table = new JTable(empModel);
+
         JButton backButton = new JButton("Back to menu");
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GUI.showGUI(workerModel);
+                GUI.showGUI(empModel);
                 dispose();
             }
         });
@@ -41,7 +41,7 @@ public class GUIWorkerList extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                GUI.showGUI(workerModel);
+                GUI.showGUI(empModel);
                 dispose();
             }
         });
