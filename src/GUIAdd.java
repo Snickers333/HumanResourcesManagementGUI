@@ -9,10 +9,14 @@ public class GUIAdd {
         String lastName = JOptionPane.showInputDialog(frame, "Enter Last Name");
         Position position = Position.valueOf(JOptionPane.showInputDialog(frame, "Enter Position" + '\n' + "MANAGER, ASSISTANT, DESIGNER, ACCOUNTANT, PR, CEO"));
         int exp = Integer.parseInt(JOptionPane.showInputDialog(frame, "Enter Experience"));
-        int salary = Integer.parseInt(JOptionPane.showInputDialog(frame, " Enter Salary"));
+        int salary = Integer.parseInt(JOptionPane.showInputDialog(frame, "Enter Salary between " + position.getMinSalary() + " and " + position.getMaxSalary()));
 
-        Employee worker = new Employee(name, lastName, position, exp, salary);
-        empModel.addEmp(worker);
+        while (!(salary >= position.getMinSalary() && salary <= position.getMaxSalary())) {
+            JOptionPane.showMessageDialog(frame, "Incorrect salary amount, try again", "Alert", JOptionPane.WARNING_MESSAGE);
+            salary = Integer.parseInt(JOptionPane.showInputDialog(frame, "Enter Salary between " + position.getMinSalary() + " and " + position.getMaxSalary()));
+        }
+
+        empModel.addEmp(new Employee(name, lastName, position, exp, salary));
 
         JOptionPane.showMessageDialog(frame, "Employee Successfully Added !");
     }

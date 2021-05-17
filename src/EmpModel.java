@@ -26,10 +26,18 @@ public class EmpModel extends AbstractTableModel {
     public void getEmpListFromFile() {
         JFrame frame = new JFrame();
         File file = new File("Data.txt");
+        // variable that checks if the employees file data was incorrect
+        int errorCounter = 0;
+
         try {
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
-                this.addEmp(Employee.getEmpFromStringArray(scanner.nextLine().split(",")));
+                Employee emp = Employee.getEmpFromStringArray(scanner.nextLine().split(","));
+                if (!(emp.getSalary() >= emp.getPosition().getMinSalary() && emp.getSalary() <= emp.getPosition().getMaxSalary())){
+                    errorCounter++;
+                    emp.setSalary(0);
+                }
+                this.addEmp(emp);
             }
         } catch (FileNotFoundException e) {
             int decision = JOptionPane.showConfirmDialog(frame, "Data file has not been found !" + '\n' + "Do you want to point to another file ?");
@@ -37,7 +45,10 @@ public class EmpModel extends AbstractTableModel {
                 getEmpListFromFile(getSelectedFile());
             }
         }
-        ;
+
+        if (errorCounter != 0){
+            JOptionPane.showMessageDialog(frame, "There has been incorrect data gathered from file" + '\n' + "Incorrect data has been changed to 0", "Alert", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     // Method to choose a specific file
@@ -76,9 +87,9 @@ public class EmpModel extends AbstractTableModel {
     }
 
     public Object[][] getEmpArray() {
-        Object[][] tmp = new Object[this.list.size()][list.get(0).getArrayFromWorker().length];
+        Object[][] tmp = new Object[this.list.size()][list.get(0).getArrayFromEmployee().length];
         for (int i = 0; i < this.list.size(); i++) {
-            tmp[i] = list.get(i).getArrayFromWorker();
+            tmp[i] = list.get(i).getArrayFromEmployee();
         }
         return tmp;
     }

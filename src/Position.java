@@ -6,8 +6,8 @@ public enum Position {
     PR (7400, 4300),
     CEO (15900, 9800);
 
-    int maxSalary;
-    int minSalary;
+    private final int maxSalary;
+    private final int minSalary;
 
     Position (int maxSalary, int minSalary) {
         this.maxSalary = maxSalary;

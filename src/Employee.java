@@ -28,7 +28,7 @@ public class Employee {
         counter++;
     }
 
-    public Object[] getArrayFromWorker() {
+    public Object[] getArrayFromEmployee() {
         return new Object[]{id, firstName, lastName, position, experience, salary};
     }
 
