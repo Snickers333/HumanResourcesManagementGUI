@@ -34,10 +34,12 @@ public class EmpModel extends AbstractTableModel {
         } catch (FileNotFoundException e) {
             int decision = JOptionPane.showConfirmDialog(frame, "Data file has not been found !" + '\n' + "Do you want to point to another file ?");
             if (decision == JOptionPane.YES_OPTION) {
-                    getEmpListFromFile(getSelectedFile());
-                }
-        };
+                getEmpListFromFile(getSelectedFile());
+            }
+        }
+        ;
     }
+
     // Method to choose a specific file
     public static File getSelectedFile() {
         JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView());
@@ -58,7 +60,7 @@ public class EmpModel extends AbstractTableModel {
         } catch (FileNotFoundException e) {
             System.out.println("Error");
         }
-        JOptionPane.showMessageDialog(null,"Data Loaded !");
+        JOptionPane.showMessageDialog(null, "Data Loaded !");
     }
 
     public void saveEmpListToFile() {
@@ -81,6 +83,9 @@ public class EmpModel extends AbstractTableModel {
         return tmp;
     }
 
+    public void editEmp(int index, Employee emp) {
+        this.list.set(index, emp);
+    }
 
     public void removeEmp(int i) {
         this.list.remove(i);
