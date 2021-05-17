@@ -43,7 +43,7 @@ public class EmpModel extends AbstractTableModel {
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 Employee emp = Employee.getEmpFromStringArray(scanner.nextLine().split(","));
-                if (!(emp.getSalary() >= emp.getPosition().getMinSalary() && emp.getSalary() <= emp.getPosition().getMaxSalary())){
+                if (!(emp.getSalary() >= emp.getPosition().getMinSalary() && emp.getSalary() <= emp.getPosition().getMaxSalary() || emp.getSalary() == 0)){
                     errorCounter++;
                     emp.setSalary(0);
                 }
@@ -85,12 +85,22 @@ public class EmpModel extends AbstractTableModel {
         this.list.set(index, emp);
     }
 
-    public void removeEmp(int i) {
-        this.list.remove(i);
+    public void removeEmp(int index) {
+        if (!(index == -1))
+            this.list.remove(index);
     }
 
     public void removeAll() {
         this.list = new ArrayList<>();
+    }
+
+    public int findEmpIndex (int index) {
+        for (int i = 0; i < this.list.size(); i++) {
+            if (list.get(i).getId() == index)
+                return i;
+        }
+        JOptionPane.showMessageDialog(null, "No employee matching this ID was found");
+        return -1;
     }
 
     @Override

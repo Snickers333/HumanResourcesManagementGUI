@@ -59,7 +59,8 @@ public class GUI {
         editEmpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                new GUIEmpList(empModel, 1);
+                mainFrame.dispose();
             }
         });
 
@@ -67,8 +68,8 @@ public class GUI {
         removeEmpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                JOptionPane.showMessageDialog(mainFrame,"Employee has beed removed");
+                new GUIEmpList(empModel, 2);
+                mainFrame.dispose();
             }
         });
 
