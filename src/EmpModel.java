@@ -23,9 +23,19 @@ public class EmpModel extends AbstractTableModel {
         return new ArrayList<>(this.list);
     }
 
-    public void getEmpListFromFile() {
+    // Method to choose a specific file
+    public static File getSelectedFile() {
+        JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView());
+
+        int value = fileChooser.showOpenDialog(null);
+        if (value == JFileChooser.APPROVE_OPTION) {
+            return fileChooser.getSelectedFile();
+        }
+        return null;
+    }
+
+    public void getEmpListFromFile(File file) {
         JFrame frame = new JFrame();
-        File file = new File("Data.txt");
         // variable that checks if the employees file data was incorrect
         int errorCounter = 0;
 
@@ -49,29 +59,6 @@ public class EmpModel extends AbstractTableModel {
         if (errorCounter != 0){
             JOptionPane.showMessageDialog(frame, "There has been incorrect data gathered from file" + '\n' + "Incorrect data has been changed to 0", "Alert", JOptionPane.WARNING_MESSAGE);
         }
-    }
-
-    // Method to choose a specific file
-    public static File getSelectedFile() {
-        JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView());
-
-        int value = fileChooser.showOpenDialog(null);
-        if (value == JFileChooser.APPROVE_OPTION) {
-            return fileChooser.getSelectedFile();
-        }
-        return null;
-    }
-
-    public void getEmpListFromFile(File file) {
-        try {
-            Scanner scanner = new Scanner(file);
-            while (scanner.hasNextLine()) {
-                this.addEmp(Employee.getEmpFromStringArray(scanner.nextLine().split(",")));
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("Error");
-        }
-        JOptionPane.showMessageDialog(null, "Data Loaded !");
     }
 
     public void saveEmpListToFile() {
