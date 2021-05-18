@@ -1,18 +1,25 @@
 import javax.swing.*;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Comparator;
 
 public class GUIEmpList extends JFrame {
     private JPanel panel;
+    private final JTable table;
 
     public GUIEmpList(EmpModel empModel, int mode) { // MODE 0 - Show List / MODE 1 - Edit Employee / MODE 2 - Remove Employee
+        table = new JTable(empModel);
         switch (mode) {
             case 0 -> {
                 setTitle("Employee List Mode");
                 drawTableModel(empModel);
+                TableRowSorter<EmpModel> sorter = new TableRowSorter<>(empModel);
+                sorter.setComparator(3, (Comparator<Position>) (o1, o2) -> o1.toString().compareTo(o2.toString()));
+                table.setRowSorter(sorter);
             }
             case 1 -> {
                 setTitle("Employee Edit Mode");
@@ -64,7 +71,6 @@ public class GUIEmpList extends JFrame {
                 panel.add(removeButton);
             }
         }
-
         setContentPane(panel);
         setVisible(true);
         Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -82,8 +88,6 @@ public class GUIEmpList extends JFrame {
     }
 
     private void drawTableModel(EmpModel empModel) {
-        JTable table = new JTable(empModel);
-
         JButton backButton = new JButton("Back to menu");
         backButton.addActionListener(new ActionListener() {
             @Override
