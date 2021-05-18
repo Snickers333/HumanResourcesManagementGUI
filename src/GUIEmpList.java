@@ -29,7 +29,22 @@ public class GUIEmpList extends JFrame {
                 textFields[3].setText("Enter Position");
                 textFields[4].setText("Enter Experience");
                 textFields[5].setText("Enter Salary");
-                // TODO !!!!!!
+
+                JButton editButton = new JButton("Apply changes");
+                editButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        Position position = Position.valueOf(textFields[3].getText());
+                        if (Integer.parseInt(textFields[5].getText()) >= position.getMinSalary() && Integer.parseInt(textFields[5].getText()) <= position.getMaxSalary()){
+                            Employee emp = new Employee(Integer.parseInt(textFields[0].getText()), textFields[1].getText(), textFields[2].getText(), Position.valueOf(textFields[3].getText()), Integer.parseInt(textFields[4].getText()), Integer.parseInt(textFields[5].getText()));
+                            empModel.editEmp(empModel.findEmpIndex(Integer.parseInt(textFields[0].getText())), emp);
+                            empModel.fireTableStructureChanged();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Valid Salary for this Position : From " + position.getMinSalary() + " To " + position.getMaxSalary());
+                        }
+                    }
+                });
+                panel.add(editButton);
             }
             case 2 -> {
                 setTitle("Employee Remove Mode");
