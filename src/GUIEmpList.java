@@ -31,9 +31,6 @@ public class GUIEmpList extends JFrame {
     }
 
     public void showMode(EmpModel empModel) {
-        setTitle("Employee List Mode");
-        drawTableModel(empModel);
-
         //Sorting
         TableRowSorter<EmpModel> sorter = new TableRowSorter<>(empModel);
         sorter.setComparator(3, (Comparator<Position>) (o1, o2) -> o1.toString().compareTo(o2.toString()));
