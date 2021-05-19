@@ -50,8 +50,13 @@ public class GUI {
         loadButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                empModel.removeAll();
-                empModel.getEmpListFromFile(EmpModel.getSelectedFile());
+                File file;
+                try {
+                    file = EmpModel.getSelectedFile();
+                    if (file != null)
+                        empModel.removeAll();
+                    empModel.getEmpListFromFile(file);
+                } catch (NullPointerException ignored){}
             }
         });
 
