@@ -8,7 +8,7 @@ public class GUIEmpList extends JFrame {
     private JPanel panel;
     private final JTable table;
 
-    public GUIEmpList(EmpModel empModel, int mode) { // MODE 0 - Show List / MODE 1 - Edit Employee / MODE 2 - Remove Employee
+    public GUIEmpList(EmpModel empModel, int mode) { // MODE 0 - Show List / MODE 1 - Edit Employee / MODE 2 - Remove Employee / MODE 3 - Add Employee
         table = new JTable(empModel);
         switch (mode) {
             case 0 -> {
@@ -146,6 +146,21 @@ public class GUIEmpList extends JFrame {
                 });
                 panel.add(idField);
                 panel.add(removeButton);
+            }
+            case 3 -> {
+                String name = (JOptionPane.showInputDialog(this, "Enter First Name"));
+                String lastName = JOptionPane.showInputDialog(this, "Enter Last Name");
+                Position position = Position.valueOf(JOptionPane.showInputDialog(this, "Enter Position" + '\n' + "MANAGER, ASSISTANT, DESIGNER, ACCOUNTANT, PR, CEO"));
+                int exp = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter Experience"));
+                int salary = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter Salary between " + position.getMinSalary() + " and " + position.getMaxSalary()));
+
+                while (!(salary >= position.getMinSalary() && salary <= position.getMaxSalary())) {
+                    JOptionPane.showMessageDialog(this, "Incorrect salary amount, try again", "Alert", JOptionPane.WARNING_MESSAGE);
+                    salary = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter Salary between " + position.getMinSalary() + " and " + position.getMaxSalary()));
+                }
+
+                empModel.addEmp(new Employee(name, lastName, position, exp, salary));
+                JOptionPane.showMessageDialog(this, "Employee Successfully Added !");
             }
         }
         setContentPane(panel);

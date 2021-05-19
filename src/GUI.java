@@ -33,7 +33,7 @@ public class GUI {
         addEmpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GUIAdd(empModel);
+                new GUIEmpList(empModel, 3);
             }
         });
 

@@ -23,11 +23,10 @@ public class EmpModel extends AbstractTableModel {
         return new ArrayList<>(this.list);
     }
 
-    // Method to choose a specific file
     public static File getSelectedFile() {
         JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView());
 
-        int value = fileChooser.showOpenDialog(null);
+        int value = fileChooser.showOpenDialog(JOptionPane.getRootFrame());
         if (value == JFileChooser.APPROVE_OPTION) {
             return fileChooser.getSelectedFile();
         }
@@ -62,14 +61,31 @@ public class EmpModel extends AbstractTableModel {
     }
 
     public void saveEmpListToFile() {
-        try {
-            FileWriter fw = new FileWriter("Data.txt");
-            for (Employee emp : list) {
-                fw.write(emp.toString() + "\n");
+        int decision = JOptionPane.showConfirmDialog(JOptionPane.getRootFrame(), "Save to default folder ?");
+        FileWriter fw;
+        if (decision == JOptionPane.YES_OPTION){
+            try {
+                fw = new FileWriter("Data.txt");
+                for (Employee emp : list) {
+                    fw.write(emp.toString() + "\n");
+                }
+                fw.close();
+            } catch (IOException e) {
+                System.out.println("IO Error - File not saved");
             }
-            fw.close();
-        } catch (IOException e) {
-            System.out.println("IO Error - File not saved");
+        } else if (decision == JOptionPane.NO_OPTION) {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.showSaveDialog(null);
+            File selectedPath = fileChooser.getSelectedFile();
+            try {
+                fw = new FileWriter(selectedPath);
+                for (Employee emp : list) {
+                    fw.write(emp.toString() + "\n");
+                }
+                fw.close();
+            } catch (IOException e) {
+                System.out.println("IO Error - File not saved");
+            }
         }
     }
 
