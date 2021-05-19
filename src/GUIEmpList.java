@@ -15,12 +15,12 @@ public class GUIEmpList extends JFrame {
                 setTitle("Employee List Mode");
                 drawTableModel(empModel);
 
-                //Sortowanie
+                //Sorting
                 TableRowSorter<EmpModel> sorter = new TableRowSorter<>(empModel);
                 sorter.setComparator(3, (Comparator<Position>) (o1, o2) -> o1.toString().compareTo(o2.toString()));
                 table.setRowSorter(sorter);
 
-                //Filtrowanie
+                //Filtering
                 String[] filterStrings = {"ID", "First Name", "Last Name", "Position", "Experience", "Salary"};
                 JComboBox<String> filterBox = new JComboBox<String>(filterStrings);
 
@@ -40,10 +40,59 @@ public class GUIEmpList extends JFrame {
                         }
                     }
                 });
-
                 panel.add(filterBox);
                 panel.add(filterField);
                 panel.add(filterButton);
+
+                //Searching
+                String[] searchStrings = {"Salary greater than","Salary less than"};
+                JComboBox<String> searchType = new JComboBox<String>(searchStrings);
+                JTextField searchField = new JTextField("Enter Value",10);
+                JButton applySearch = new JButton("Apply");
+
+                //Greater than
+                RowFilter<EmpModel,Integer> greaterThan = new RowFilter<EmpModel, Integer>() {
+                    @Override
+                    public boolean include(Entry<? extends EmpModel, ? extends Integer> entry) {
+                        if (((int) table.getValueAt(entry.getIdentifier(), 5) > Integer.parseInt(searchField.getText()))) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                };
+
+                //Less than
+                RowFilter<EmpModel,Integer> lessThan = new RowFilter<EmpModel, Integer>() {
+                    @Override
+                    public boolean include(Entry<? extends EmpModel, ? extends Integer> entry) {
+                        if ((int) table.getValueAt(entry.getIdentifier(), 5) < Integer.parseInt(searchField.getText())) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                };
+
+                //Greater or Less depending on ComboBox selected
+                applySearch.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        sorter.setRowFilter(null);
+                        if (!(searchField.getText().equals("") || searchField.getText().equals("Enter Value"))){
+                            int type = searchType.getSelectedIndex();
+                            if (type == 0){
+                                sorter.setRowFilter(greaterThan);
+                            } else {
+                                sorter.setRowFilter(lessThan);
+                            }
+                        }
+                    }
+                });
+
+                panel.add(searchType);
+                panel.add(searchField);
+                panel.add(applySearch);
             }
             case 1 -> {
                 setTitle("Employee Edit Mode");
