@@ -67,7 +67,11 @@ public class GUIEmpList extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         Position position = Position.valueOf(textFields[3].getText());
                         if (Integer.parseInt(textFields[5].getText()) >= position.getMinSalary() && Integer.parseInt(textFields[5].getText()) <= position.getMaxSalary()){
-                            Employee emp = new Employee(Integer.parseInt(textFields[0].getText()), textFields[1].getText(), textFields[2].getText(), Position.valueOf(textFields[3].getText()), Integer.parseInt(textFields[4].getText()), Integer.parseInt(textFields[5].getText()));
+                            String[] empInStr = new String[6];
+                            for (int i = 0; i < textFields.length; i++) {
+                                empInStr[i] = textFields[i].getText();
+                            }
+                            Employee emp = Employee.getEmpFromStringArray(empInStr);
                             empModel.editEmp(empModel.findEmpIndex(Integer.parseInt(textFields[0].getText())), emp);
                             empModel.fireTableStructureChanged();
                         } else {
