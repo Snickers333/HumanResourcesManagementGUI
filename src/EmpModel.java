@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class EmpModel extends AbstractTableModel {
-    private String[] headers = {"ID", "First Name", "Last Name", "Position", "Experience", "Salary"};
+    private final String[] headers = {"ID", "First Name", "Last Name", "Position", "Experience", "Salary"};
 
     private List<Employee> list;
 
@@ -17,10 +17,6 @@ public class EmpModel extends AbstractTableModel {
 
     public void addEmp(Employee e) {
         list.add(e);
-    }
-
-    public List<Employee> getEmpList() {
-        return new ArrayList<>(this.list);
     }
 
     public static File getSelectedFile() {
@@ -42,7 +38,7 @@ public class EmpModel extends AbstractTableModel {
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 Employee emp = Employee.getEmpFromStringArray(scanner.nextLine().split(","));
-                if (!(emp.getSalary() >= emp.getPosition().getMinSalary() && emp.getSalary() <= emp.getPosition().getMaxSalary() || emp.getSalary() == 0)){
+                if (!(emp.getSalary() >= emp.getPosition().getMinSalary() && emp.getSalary() <= emp.getPosition().getMaxSalary() || emp.getSalary() == 0)) {
                     errorCounter++;
                     emp.setSalary(0);
                 }
@@ -55,7 +51,7 @@ public class EmpModel extends AbstractTableModel {
             }
         }
 
-        if (errorCounter != 0){
+        if (errorCounter != 0) {
             JOptionPane.showMessageDialog(frame, "There has been incorrect data gathered from file" + '\n' + "Incorrect data has been changed to 0", "Alert", JOptionPane.WARNING_MESSAGE);
         }
     }
@@ -63,13 +59,14 @@ public class EmpModel extends AbstractTableModel {
     public void saveEmpListToFile() {
         int decision = JOptionPane.showConfirmDialog(JOptionPane.getRootFrame(), "Save to default folder ?");
         FileWriter fw;
-        if (decision == JOptionPane.YES_OPTION){
+        if (decision == JOptionPane.YES_OPTION) {
             try {
                 fw = new FileWriter("Data.txt");
                 for (Employee emp : list) {
                     fw.write(emp.toString() + "\n");
                 }
                 fw.close();
+                JOptionPane.showMessageDialog(null, "Successfully saved !");
             } catch (IOException e) {
                 System.out.println("IO Error - File not saved");
             }
@@ -83,18 +80,11 @@ public class EmpModel extends AbstractTableModel {
                     fw.write(emp.toString() + "\n");
                 }
                 fw.close();
+                JOptionPane.showMessageDialog(null, "Successfully saved !");
             } catch (IOException e) {
                 System.out.println("IO Error - File not saved");
             }
         }
-    }
-
-    public Object[][] getEmpArray() {
-        Object[][] tmp = new Object[this.list.size()][list.get(0).getArrayFromEmployee().length];
-        for (int i = 0; i < this.list.size(); i++) {
-            tmp[i] = list.get(i).getArrayFromEmployee();
-        }
-        return tmp;
     }
 
     public void editEmp(int index, Employee emp) {
@@ -110,7 +100,7 @@ public class EmpModel extends AbstractTableModel {
         this.list = new ArrayList<>();
     }
 
-    public int findEmpIndex (int index) {
+    public int findEmpIndex(int index) {
         for (int i = 0; i < this.list.size(); i++) {
             if (list.get(i).getId() == index)
                 return i;

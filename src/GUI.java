@@ -42,7 +42,6 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 empModel.saveEmpListToFile();
-                JOptionPane.showMessageDialog(mainFrame,"Successfully saved !");
             }
         });
 
@@ -56,7 +55,8 @@ public class GUI {
                     if (file != null)
                         empModel.removeAll();
                     empModel.getEmpListFromFile(file);
-                } catch (NullPointerException ignored){}
+                } catch (NullPointerException ignored) {
+                }
             }
         });
 
