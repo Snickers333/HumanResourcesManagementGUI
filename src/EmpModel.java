@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class EmpModel extends AbstractTableModel {
-    private String[] headers = {"ID", "First Name", "Last Name", "Position", "Experience", "Salary"};
+    private final String[] headers = {"ID", "First Name", "Last Name", "Position", "Experience", "Salary"};
 
     private List<Employee> list;
 
@@ -19,15 +19,10 @@ public class EmpModel extends AbstractTableModel {
         list.add(e);
     }
 
-    public List<Employee> getEmpList() {
-        return new ArrayList<>(this.list);
-    }
-
-    // Method to choose a specific file
     public static File getSelectedFile() {
         JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView());
 
-        int value = fileChooser.showOpenDialog(null);
+        int value = fileChooser.showOpenDialog(JOptionPane.getRootFrame());
         if (value == JFileChooser.APPROVE_OPTION) {
             return fileChooser.getSelectedFile();
         }
@@ -43,11 +38,13 @@ public class EmpModel extends AbstractTableModel {
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 Employee emp = Employee.getEmpFromStringArray(scanner.nextLine().split(","));
-                if (!(emp.getSalary() >= emp.getPosition().getMinSalary() && emp.getSalary() <= emp.getPosition().getMaxSalary() || emp.getSalary() == 0)){
-                    errorCounter++;
-                    emp.setSalary(0);
+                if (!(emp == null)){
+                    if (!(emp.getSalary() >= emp.getPosition().getMinSalary() && emp.getSalary() <= emp.getPosition().getMaxSalary() || emp.getSalary() == 0)) {
+                        errorCounter++;
+                        emp.setSalary(0);
+                    }
+                    this.addEmp(emp);
                 }
-                this.addEmp(emp);
             }
         } catch (FileNotFoundException e) {
             int decision = JOptionPane.showConfirmDialog(frame, "Data file has not been found !" + '\n' + "Do you want to point to another file ?");
@@ -56,29 +53,42 @@ public class EmpModel extends AbstractTableModel {
             }
         }
 
-        if (errorCounter != 0){
+        if (this.list.size() == 0)
+            JOptionPane.showMessageDialog(frame, "There has been incorrect data gathered from file", "Error", JOptionPane.ERROR_MESSAGE);
+        if (errorCounter != 0) {
             JOptionPane.showMessageDialog(frame, "There has been incorrect data gathered from file" + '\n' + "Incorrect data has been changed to 0", "Alert", JOptionPane.WARNING_MESSAGE);
         }
     }
 
     public void saveEmpListToFile() {
-        try {
-            FileWriter fw = new FileWriter("Data.txt");
-            for (Employee emp : list) {
-                fw.write(emp.toString() + "\n");
+        int decision = JOptionPane.showConfirmDialog(JOptionPane.getRootFrame(), "Save to default folder ?");
+        FileWriter fw;
+        if (decision == JOptionPane.YES_OPTION) {
+            try {
+                fw = new FileWriter("Data.txt");
+                for (Employee emp : list) {
+                    fw.write(emp.toString() + "\n");
+                }
+                fw.close();
+                JOptionPane.showMessageDialog(null, "Successfully saved !");
+            } catch (IOException e) {
+                System.out.println("IO Error - File not saved");
             }
-            fw.close();
-        } catch (IOException e) {
-            System.out.println("IO Error - File not saved");
+        } else if (decision == JOptionPane.NO_OPTION) {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.showSaveDialog(null);
+            File selectedPath = fileChooser.getSelectedFile();
+            try {
+                fw = new FileWriter(selectedPath);
+                for (Employee emp : list) {
+                    fw.write(emp.toString() + "\n");
+                }
+                fw.close();
+                JOptionPane.showMessageDialog(null, "Successfully saved !");
+            } catch (IOException e) {
+                System.out.println("IO Error - File not saved");
+            }
         }
-    }
-
-    public Object[][] getEmpArray() {
-        Object[][] tmp = new Object[this.list.size()][list.get(0).getArrayFromEmployee().length];
-        for (int i = 0; i < this.list.size(); i++) {
-            tmp[i] = list.get(i).getArrayFromEmployee();
-        }
-        return tmp;
     }
 
     public void editEmp(int index, Employee emp) {
@@ -94,7 +104,7 @@ public class EmpModel extends AbstractTableModel {
         this.list = new ArrayList<>();
     }
 
-    public int findEmpIndex (int index) {
+    public int findEmpIndex(int index) {
         for (int i = 0; i < this.list.size(); i++) {
             if (list.get(i).getId() == index)
                 return i;
