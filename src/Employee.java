@@ -1,3 +1,5 @@
+import javax.swing.*;
+
 public class Employee {
     private static int counter = 1;
 
@@ -29,7 +31,11 @@ public class Employee {
     }
 
     public static Employee getEmpFromStringArray(String[] arr) {
-        return new Employee(Integer.parseInt(arr[0]), arr[1], arr[2], Position.valueOf(arr[3]), Integer.parseInt(arr[4]), Integer.parseInt(arr[5]));
+        try {
+            return new Employee(Integer.parseInt(arr[0]), arr[1], arr[2], Position.valueOf(arr[3]), Integer.parseInt(arr[4]), Integer.parseInt(arr[5]));
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
     public int getId() {

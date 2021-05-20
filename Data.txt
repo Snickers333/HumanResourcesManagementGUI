@@ -7,3 +7,4 @@
 7,Sema,lkjsf;lsa,MANAGER,123,3400
 8,waisdmo,aiwjfl,MANAGER,12645,0
 9,seima,frajer,MANAGER,123,2800
+10,null,null,PR,123,4500

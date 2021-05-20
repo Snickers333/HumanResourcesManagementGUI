@@ -38,11 +38,13 @@ public class EmpModel extends AbstractTableModel {
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 Employee emp = Employee.getEmpFromStringArray(scanner.nextLine().split(","));
-                if (!(emp.getSalary() >= emp.getPosition().getMinSalary() && emp.getSalary() <= emp.getPosition().getMaxSalary() || emp.getSalary() == 0)) {
-                    errorCounter++;
-                    emp.setSalary(0);
+                if (!(emp == null)){
+                    if (!(emp.getSalary() >= emp.getPosition().getMinSalary() && emp.getSalary() <= emp.getPosition().getMaxSalary() || emp.getSalary() == 0)) {
+                        errorCounter++;
+                        emp.setSalary(0);
+                    }
+                    this.addEmp(emp);
                 }
-                this.addEmp(emp);
             }
         } catch (FileNotFoundException e) {
             int decision = JOptionPane.showConfirmDialog(frame, "Data file has not been found !" + '\n' + "Do you want to point to another file ?");
@@ -51,6 +53,8 @@ public class EmpModel extends AbstractTableModel {
             }
         }
 
+        if (this.list.size() == 0)
+            JOptionPane.showMessageDialog(frame, "There has been incorrect data gathered from file", "Error", JOptionPane.ERROR_MESSAGE);
         if (errorCounter != 0) {
             JOptionPane.showMessageDialog(frame, "There has been incorrect data gathered from file" + '\n' + "Incorrect data has been changed to 0", "Alert", JOptionPane.WARNING_MESSAGE);
         }

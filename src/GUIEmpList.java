@@ -3,9 +3,10 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Comparator;
+import java.util.InputMismatchException;
+import java.util.Locale;
 
 public class GUIEmpList extends JFrame {
-    private JPanel panel;
     private final JTable table;
     private JButton backButton;
 
@@ -33,7 +34,7 @@ public class GUIEmpList extends JFrame {
 
     public void showMode(EmpModel empModel) {
         JPanel activePanel = new JPanel();
-        activePanel.setLayout(new GridLayout(0,1,15,15));
+        activePanel.setLayout(new GridLayout(0, 1, 15, 15));
 
         //Sorting
         TableRowSorter<EmpModel> sorter = new TableRowSorter<>(empModel);
@@ -120,7 +121,7 @@ public class GUIEmpList extends JFrame {
 
     public void editMode(EmpModel empModel) {
         JPanel activePanel = new JPanel();
-        activePanel.setLayout(new GridLayout(0,1,15,15));
+        activePanel.setLayout(new GridLayout(0, 1, 15, 15));
         JTextField[] textFields = new JTextField[6];
         for (int i = 0; i < textFields.length; i++) {
             textFields[i] = new JTextField(10);
@@ -137,21 +138,26 @@ public class GUIEmpList extends JFrame {
         editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Position position = Position.valueOf(textFields[3].getText());
+                String[] empInStr = new String[6];
+                for (int i = 0; i < textFields.length; i++) {
+                    empInStr[i] = textFields[i].getText();
+                }
+                empInStr[3] = empInStr[3].toUpperCase();
 
-                if (textFields[5].getText().equals("") || textFields[5].getText().equals("Enter Salary"))
-                    textFields[5].setText("0");
+                try {
+                    Integer.parseInt(empInStr[0]);
+                    Position position = Position.valueOf(empInStr[3]);
+                    int salary = Integer.parseInt(empInStr[5]);
+                    if (!(salary >= position.getMinSalary() && salary <= position.getMaxSalary())) {
+                        JOptionPane.showMessageDialog(null, "Valid Salary for this Position : From " + position.getMinSalary() + " To " + position.getMaxSalary());
+                    } else {
+                        Employee emp = Employee.getEmpFromStringArray(empInStr);
 
-                if (Integer.parseInt(textFields[5].getText()) >= position.getMinSalary() && Integer.parseInt(textFields[5].getText()) <= position.getMaxSalary()) {
-                    String[] empInStr = new String[6];
-                    for (int i = 0; i < textFields.length; i++) {
-                        empInStr[i] = textFields[i].getText();
+                        empModel.editEmp(empModel.findEmpIndex(Integer.parseInt(textFields[0].getText())), emp);
+                        empModel.fireTableStructureChanged();
                     }
-                    Employee emp = Employee.getEmpFromStringArray(empInStr);
-                    empModel.editEmp(empModel.findEmpIndex(Integer.parseInt(textFields[0].getText())), emp);
-                    empModel.fireTableStructureChanged();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Valid Salary for this Position : From " + position.getMinSalary() + " To " + position.getMaxSalary());
+                } catch (IllegalArgumentException ex){
+                    JOptionPane.showMessageDialog(null, "Incorrect Data", "Alert", JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
@@ -163,15 +169,21 @@ public class GUIEmpList extends JFrame {
 
     public void removeMode(EmpModel empModel) {
         JPanel activePanel = new JPanel();
-        activePanel.setLayout(new GridLayout(0,1,15,15));
+        activePanel.setLayout(new GridLayout(0, 1, 15, 15));
         JTextField idField = new JTextField("Here enter emp ID");
 
         JButton removeButton = new JButton("Remove Employee");
         removeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                empModel.removeEmp(empModel.findEmpIndex(Integer.parseInt(idField.getText())));
-                empModel.fireTableStructureChanged();
+                int id = 0;
+                try {
+                    id = Integer.parseInt(idField.getText());
+                    empModel.removeEmp(empModel.findEmpIndex(id));
+                    empModel.fireTableStructureChanged();
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Incorrect number", "Alert", JOptionPane.WARNING_MESSAGE);
+                }
             }
         });
         activePanel.add(idField);
@@ -182,22 +194,62 @@ public class GUIEmpList extends JFrame {
     }
 
     public void addMode(EmpModel empModel) {
-        String name = (JOptionPane.showInputDialog(this, "Enter First Name"));
+        String name = JOptionPane.showInputDialog(this, "Enter First Name");
         String lastName = JOptionPane.showInputDialog(this, "Enter Last Name");
-        Position position = Position.valueOf(JOptionPane.showInputDialog(this, "Enter Position" + '\n' + "MANAGER, ASSISTANT, DESIGNER, ACCOUNTANT, PR, CEO"));
-        int exp = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter Experience"));
-        int salary = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter Salary between " + position.getMinSalary() + " and " + position.getMaxSalary()));
-
-        while (!(salary >= position.getMinSalary() && salary <= position.getMaxSalary())) {
-            JOptionPane.showMessageDialog(this, "Incorrect salary amount, try again", "Alert", JOptionPane.WARNING_MESSAGE);
-            salary = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter Salary between " + position.getMinSalary() + " and " + position.getMaxSalary()));
-        }
+        Position position = parseValidPosition();
+        int exp = parseValidInt("Enter Experience");
+        int salary = parseValidInt("Enter Salary between " + position.getMinSalary() + " and " + position.getMaxSalary(), position);
 
         empModel.addEmp(new Employee(name, lastName, position, exp, salary));
         JOptionPane.showMessageDialog(this, "Employee Successfully Added !");
     }
 
+    private static int parseValidInt(String message) {
+        int errorCounter = 0;
+        int output = 0;
+        while (errorCounter != 1)
+            try {
+                output = Integer.parseInt(JOptionPane.showInputDialog(null, message));
+                errorCounter++;
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Incorrect value! \nPlease try again.", "Alert", JOptionPane.WARNING_MESSAGE);
+            }
+        return output;
+    }
+
+    private static int parseValidInt(String message, Position position) {
+        int errorCounter = 0;
+        int output = 0;
+        while (errorCounter != 1)
+            try {
+                output = Integer.parseInt(JOptionPane.showInputDialog(null, message));
+                errorCounter++;
+                if (!(output >= position.getMinSalary() && output <= position.getMaxSalary())) {
+                    JOptionPane.showMessageDialog(null, "Incorrect value! \nPlease try again.", "Alert", JOptionPane.WARNING_MESSAGE);
+                    errorCounter--;
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Incorrect value! \nPlease try again.", "Alert", JOptionPane.WARNING_MESSAGE);
+            }
+        return output;
+    }
+
+    private static Position parseValidPosition() {
+        int errorCounter = 0;
+        Position position = null;
+        while (errorCounter != 1) {
+            try {
+                position = Position.valueOf(JOptionPane.showInputDialog(null, "Enter Position" + '\n' + "MANAGER, ASSISTANT, DESIGNER, ACCOUNTANT, PR, CEO").toUpperCase());
+                errorCounter++;
+            } catch (IllegalArgumentException | NullPointerException e) {
+                JOptionPane.showMessageDialog(null, "Incorrect value! \nPlease try again.", "Alert", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+        return position;
+    }
+
     private void drawTableModel(EmpModel empModel) {
+        JPanel panel = new JPanel();
         backButton = new JButton("Back to menu");
         backButton.addActionListener(new ActionListener() {
             @Override
@@ -211,7 +263,6 @@ public class GUIEmpList extends JFrame {
         scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        panel = new JPanel();
         panel.add(scroll);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         add(panel, BorderLayout.NORTH);
