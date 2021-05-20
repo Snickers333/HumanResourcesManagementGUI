@@ -80,7 +80,11 @@ public class GUI {
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        ImageIcon icon = new ImageIcon ("HRMGUI.png") ;
+        JLabel picLabel = new JLabel(icon);
+        picLabel.setPreferredSize(new Dimension(475,385));
 
+        mainPanel.add(picLabel);
         mainPanel.add(showListButton);
         mainPanel.add(addEmpButton);
         mainPanel.add(editEmpButton);
@@ -92,7 +96,7 @@ public class GUI {
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
         mainFrame.setLocation(screenDim.width / 3, screenDim.height / 4);
-        mainFrame.setSize(800, 600);
+        mainFrame.setSize(500, 600);
         mainFrame.setVisible(true);
     }
 }

@@ -7,6 +7,7 @@ import java.util.Comparator;
 public class GUIEmpList extends JFrame {
     private JPanel panel;
     private final JTable table;
+    private JButton backButton;
 
     public GUIEmpList(EmpModel empModel, int mode) { // MODE 0 - Show List / MODE 1 - Edit Employee / MODE 2 - Remove Employee / MODE 3 - Add Employee
         table = new JTable(empModel);
@@ -31,6 +32,9 @@ public class GUIEmpList extends JFrame {
     }
 
     public void showMode(EmpModel empModel) {
+        JPanel activePanel = new JPanel();
+        activePanel.setLayout(new GridLayout(0,1,15,15));
+
         //Sorting
         TableRowSorter<EmpModel> sorter = new TableRowSorter<>(empModel);
         sorter.setComparator(3, (Comparator<Position>) (o1, o2) -> o1.toString().compareTo(o2.toString()));
@@ -56,9 +60,9 @@ public class GUIEmpList extends JFrame {
                 }
             }
         });
-        panel.add(filterBox);
-        panel.add(filterField);
-        panel.add(filterButton);
+        activePanel.add(filterBox);
+        activePanel.add(filterField);
+        activePanel.add(filterButton);
 
         //Searching
         String[] searchStrings = {"Salary greater than", "Salary less than"};
@@ -105,17 +109,22 @@ public class GUIEmpList extends JFrame {
                 }
             }
         });
+        activePanel.add(searchType);
+        activePanel.add(searchField);
+        activePanel.add(applySearch);
+        activePanel.add(backButton);
 
-        panel.add(searchType);
-        panel.add(searchField);
-        panel.add(applySearch);
+        add(activePanel, BorderLayout.AFTER_LAST_LINE);
+        setSize(455, 735);
     }
 
     public void editMode(EmpModel empModel) {
+        JPanel activePanel = new JPanel();
+        activePanel.setLayout(new GridLayout(0,1,15,15));
         JTextField[] textFields = new JTextField[6];
         for (int i = 0; i < textFields.length; i++) {
             textFields[i] = new JTextField(10);
-            panel.add(textFields[i]);
+            activePanel.add(textFields[i]);
         }
         textFields[0].setText("Enter ID");
         textFields[1].setText("Enter Name");
@@ -146,13 +155,18 @@ public class GUIEmpList extends JFrame {
                 }
             }
         });
-        panel.add(editButton);
+        activePanel.add(editButton);
+        activePanel.add(backButton);
+        add(activePanel, BorderLayout.AFTER_LAST_LINE);
+        setSize(455, 775);
     }
 
     public void removeMode(EmpModel empModel) {
+        JPanel activePanel = new JPanel();
+        activePanel.setLayout(new GridLayout(0,1,15,15));
         JTextField idField = new JTextField("Here enter emp ID");
 
-        JButton removeButton = new JButton("Remove");
+        JButton removeButton = new JButton("Remove Employee");
         removeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -160,8 +174,11 @@ public class GUIEmpList extends JFrame {
                 empModel.fireTableStructureChanged();
             }
         });
-        panel.add(idField);
-        panel.add(removeButton);
+        activePanel.add(idField);
+        activePanel.add(removeButton);
+        activePanel.add(backButton);
+        add(activePanel, BorderLayout.AFTER_LAST_LINE);
+        setSize(455, 570);
     }
 
     public void addMode(EmpModel empModel) {
@@ -181,7 +198,7 @@ public class GUIEmpList extends JFrame {
     }
 
     private void drawTableModel(EmpModel empModel) {
-        JButton backButton = new JButton("Back to menu");
+        backButton = new JButton("Back to menu");
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -196,9 +213,8 @@ public class GUIEmpList extends JFrame {
 
         panel = new JPanel();
         panel.add(scroll);
-        panel.add(backButton);
-        panel.setLayout(new FlowLayout());
-        setContentPane(panel);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        add(panel, BorderLayout.NORTH);
         setVisible(true);
         Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation(screenDim.width / 3, screenDim.height / 4);
