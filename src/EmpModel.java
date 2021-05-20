@@ -85,8 +85,8 @@ public class EmpModel extends AbstractTableModel {
                 }
                 fw.close();
                 JOptionPane.showMessageDialog(null, "Successfully saved !");
-            } catch (IOException e) {
-                System.out.println("IO Error - File not saved");
+            } catch (IOException | NullPointerException e) {
+                JOptionPane.showMessageDialog(null,"IO Error - File not saved","Error",JOptionPane.ERROR_MESSAGE);
             }
         }
     }

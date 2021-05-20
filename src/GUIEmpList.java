@@ -156,7 +156,7 @@ public class GUIEmpList extends JFrame {
                         empModel.editEmp(empModel.findEmpIndex(Integer.parseInt(textFields[0].getText())), emp);
                         empModel.fireTableStructureChanged();
                     }
-                } catch (IllegalArgumentException ex){
+                } catch (IllegalArgumentException | NullPointerException ex){
                     JOptionPane.showMessageDialog(null, "Incorrect Data", "Alert", JOptionPane.WARNING_MESSAGE);
                 }
             }
