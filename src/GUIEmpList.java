@@ -3,8 +3,6 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Comparator;
-import java.util.InputMismatchException;
-import java.util.Locale;
 
 public class GUIEmpList extends JFrame {
     private final JTable table;
@@ -119,7 +117,7 @@ public class GUIEmpList extends JFrame {
         setSize(455, 735);
     }
 
-    public void editMode(EmpModel empModel) {
+    private void editMode(EmpModel empModel) {
         JPanel activePanel = new JPanel();
         activePanel.setLayout(new GridLayout(0, 1, 15, 15));
         JTextField[] textFields = new JTextField[6];
@@ -167,7 +165,7 @@ public class GUIEmpList extends JFrame {
         setSize(455, 775);
     }
 
-    public void removeMode(EmpModel empModel) {
+    private void removeMode(EmpModel empModel) {
         JPanel activePanel = new JPanel();
         activePanel.setLayout(new GridLayout(0, 1, 15, 15));
         JTextField idField = new JTextField("Here enter emp ID");
@@ -176,7 +174,7 @@ public class GUIEmpList extends JFrame {
         removeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int id = 0;
+                int id;
                 try {
                     id = Integer.parseInt(idField.getText());
                     empModel.removeEmp(empModel.findEmpIndex(id));
@@ -193,7 +191,7 @@ public class GUIEmpList extends JFrame {
         setSize(455, 570);
     }
 
-    public void addMode(EmpModel empModel) {
+    private void addMode(EmpModel empModel) {
         String name = JOptionPane.showInputDialog(this, "Enter First Name");
         String lastName = JOptionPane.showInputDialog(this, "Enter Last Name");
         Position position = parseValidPosition();

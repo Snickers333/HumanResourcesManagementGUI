@@ -1,5 +1,3 @@
-import javax.swing.*;
-
 public class Employee {
     private static int counter = 1;
 
