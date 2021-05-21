@@ -69,15 +69,12 @@ public class GUIEmpList extends JFrame {
         JTextField searchField = new JTextField("Enter Value", 10);
         JButton applySearch = new JButton("Apply");
 
+
         //Greater than
         RowFilter<EmpModel, Integer> greaterThan = new RowFilter<>() {
             @Override
             public boolean include(Entry<? extends EmpModel, ? extends Integer> entry) {
-                if (((int) table.getValueAt(entry.getIdentifier(), 5) > Integer.parseInt(searchField.getText()))) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return (int) table.getValueAt(entry.getIdentifier(), 5) > Integer.parseInt(searchField.getText());
             }
         };
 
@@ -85,11 +82,7 @@ public class GUIEmpList extends JFrame {
         RowFilter<EmpModel, Integer> lessThan = new RowFilter<>() {
             @Override
             public boolean include(Entry<? extends EmpModel, ? extends Integer> entry) {
-                if ((int) table.getValueAt(entry.getIdentifier(), 5) < Integer.parseInt(searchField.getText())) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return (int) table.getValueAt(entry.getIdentifier(), 5) < Integer.parseInt(searchField.getText());
             }
         };
 
@@ -100,10 +93,14 @@ public class GUIEmpList extends JFrame {
                 sorter.setRowFilter(null);
                 if (!(searchField.getText().equals("") || searchField.getText().equals("Enter Value"))) {
                     int type = searchType.getSelectedIndex();
-                    if (type == 0) {
-                        sorter.setRowFilter(greaterThan);
-                    } else {
-                        sorter.setRowFilter(lessThan);
+                    try {
+                        if (type == 0) {
+                            sorter.setRowFilter(greaterThan);
+                        } else {
+                            sorter.setRowFilter(lessThan);
+                        }
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(null, "Please enter number !", "Alert", JOptionPane.WARNING_MESSAGE);
                     }
                 }
             }
@@ -154,7 +151,7 @@ public class GUIEmpList extends JFrame {
                         empModel.editEmp(empModel.findEmpIndex(Integer.parseInt(textFields[0].getText())), emp);
                         empModel.fireTableStructureChanged();
                     }
-                } catch (IllegalArgumentException | NullPointerException ex){
+                } catch (IllegalArgumentException | NullPointerException ex) {
                     JOptionPane.showMessageDialog(null, "Incorrect Data", "Alert", JOptionPane.WARNING_MESSAGE);
                 }
             }

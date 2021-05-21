@@ -81,9 +81,9 @@ public class GUI {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        ImageIcon homePicture = new ImageIcon ("HRMGUI.png") ;
+        ImageIcon homePicture = new ImageIcon("HRMGUI.png");
         JLabel picLabel = new JLabel(homePicture);
-        picLabel.setPreferredSize(new Dimension(475,385));
+        picLabel.setPreferredSize(new Dimension(475, 385));
 
         mainPanel.add(picLabel);
         mainPanel.add(showListButton);

@@ -38,7 +38,7 @@ public class EmpModel extends AbstractTableModel {
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 Employee emp = Employee.getEmpFromStringArray(scanner.nextLine().split(","));
-                if (!(emp == null)){
+                if (!(emp == null)) {
                     if (!(emp.getSalary() >= emp.getPosition().getMinSalary() && emp.getSalary() <= emp.getPosition().getMaxSalary() || emp.getSalary() == 0)) {
                         errorCounter++;
                         emp.setSalary(0);
@@ -86,7 +86,7 @@ public class EmpModel extends AbstractTableModel {
                 fw.close();
                 JOptionPane.showMessageDialog(null, "Successfully saved !");
             } catch (IOException | NullPointerException e) {
-                JOptionPane.showMessageDialog(null,"IO Error - File not saved","Error",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "IO Error - File not saved", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
