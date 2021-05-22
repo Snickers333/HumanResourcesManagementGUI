@@ -43,7 +43,7 @@ public class GUIEmpList extends JFrame {
         String[] filterStrings = {"ID", "First Name", "Last Name", "Position", "Experience", "Salary"};
         JComboBox<String> filterBox = new JComboBox<>(filterStrings);
 
-        JTextField filterField = new JTextField("Enter filter here", 10);
+        JTextField filterField = new HintTextField("Enter filter here");
 
         JButton filterButton = new JButton("Filter");
         filterButton.addActionListener(new ActionListener() {
@@ -66,7 +66,7 @@ public class GUIEmpList extends JFrame {
         //Searching
         String[] searchStrings = {"Salary greater than", "Salary less than"};
         JComboBox<String> searchType = new JComboBox<>(searchStrings);
-        JTextField searchField = new JTextField("Enter Value", 10);
+        JTextField searchField = new HintTextField("Enter Value");
         JButton applySearch = new JButton("Apply");
 
 
@@ -118,16 +118,17 @@ public class GUIEmpList extends JFrame {
         JPanel activePanel = new JPanel();
         activePanel.setLayout(new GridLayout(0, 1, 15, 15));
         JTextField[] textFields = new JTextField[6];
+
+        textFields[0] = new HintTextField("Enter ID");
+        textFields[1] = new HintTextField("Enter Name");
+        textFields[2] = new HintTextField("Enter Family Name");
+        textFields[3] = new HintTextField("Enter Position");
+        textFields[4] = new HintTextField("Enter Experience");
+        textFields[5] = new HintTextField("Enter Salary");
+
         for (int i = 0; i < textFields.length; i++) {
-            textFields[i] = new JTextField(10);
             activePanel.add(textFields[i]);
         }
-        textFields[0].setText("Enter ID");
-        textFields[1].setText("Enter Name");
-        textFields[2].setText("Enter Family Name");
-        textFields[3].setText("Enter Position");
-        textFields[4].setText("Enter Experience");
-        textFields[5].setText("Enter Salary");
 
         JButton editButton = new JButton("Apply changes");
         editButton.addActionListener(new ActionListener() {
@@ -165,7 +166,7 @@ public class GUIEmpList extends JFrame {
     private void removeMode(EmpModel empModel) {
         JPanel activePanel = new JPanel();
         activePanel.setLayout(new GridLayout(0, 1, 15, 15));
-        JTextField idField = new JTextField("Here enter emp ID");
+        JTextField idField = new HintTextField("Here enter emp ID");
 
         JButton removeButton = new JButton("Remove Employee");
         removeButton.addActionListener(new ActionListener() {
