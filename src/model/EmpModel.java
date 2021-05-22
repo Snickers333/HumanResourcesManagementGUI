@@ -37,6 +37,9 @@ public class EmpModel extends AbstractTableModel {
         int errorCounter = 0;
 
         try {
+            if (file == null) {
+                return;
+            }
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 Employee emp = Employee.getEmpFromStringArray(scanner.nextLine().split(","));
@@ -52,6 +55,8 @@ public class EmpModel extends AbstractTableModel {
             int decision = JOptionPane.showConfirmDialog(frame, "Data file has not been found !" + '\n' + "Do you want to point to another file ?");
             if (decision == JOptionPane.YES_OPTION) {
                 getEmpListFromFile(getSelectedFile());
+            } else {
+                return;
             }
         }
 
