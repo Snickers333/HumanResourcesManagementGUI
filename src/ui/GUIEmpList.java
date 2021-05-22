@@ -1,6 +1,6 @@
 package ui;
 
-import data.EmployeesData;
+import model.EmpModel;
 import model.Employee;
 import model.Position;
 import utils.HintTextField;
@@ -15,39 +15,39 @@ public class GUIEmpList extends JFrame {
     private final JTable table;
     private JButton backButton;
 
-    public GUIEmpList(EmployeesData employeesData, int mode) { // MODE 0 - Show List / MODE 1 - Edit model.Employee / MODE 2 - Remove model.Employee / MODE 3 - Add model.Employee
-        table = new JTable(employeesData);
+    public GUIEmpList(EmpModel empModel, int mode) { // MODE 0 - Show List / MODE 1 - Edit Employee / MODE 2 - Remove Employee / MODE 3 - Add Employee
+        table = new JTable(empModel);
         switch (mode) {
             case 0 -> {
-                setTitle("model.Employee List Mode");
-                drawTableModel(employeesData);
-                showMode(employeesData);
+                setTitle("Employee List Mode");
+                drawTableModel(empModel);
+                showMode(empModel);
             }
             case 1 -> {
-                setTitle("model.Employee Edit Mode");
-                drawTableModel(employeesData);
-                editMode(employeesData);
+                setTitle("Employee Edit Mode");
+                drawTableModel(empModel);
+                editMode(empModel);
             }
             case 2 -> {
-                setTitle("model.Employee Remove Mode");
-                drawTableModel(employeesData);
-                removeMode(employeesData);
+                setTitle("Employee Remove Mode");
+                drawTableModel(empModel);
+                removeMode(empModel);
             }
-            case 3 -> addMode(employeesData);
+            case 3 -> addMode(empModel);
         }
     }
 
-    public void showMode(EmployeesData employeesData) {
+    public void showMode(EmpModel empModel) {
         JPanel activePanel = new JPanel();
         activePanel.setLayout(new GridLayout(0, 1, 15, 15));
 
         //Sorting
-        TableRowSorter<EmployeesData> sorter = new TableRowSorter<>(employeesData);
+        TableRowSorter<EmpModel> sorter = new TableRowSorter<>(empModel);
         sorter.setComparator(3, (Comparator<Position>) (o1, o2) -> o1.toString().compareTo(o2.toString()));
         table.setRowSorter(sorter);
 
         //Filtering
-        String[] filterStrings = {"ID", "First Name", "Last Name", "model.Position", "Experience", "Salary"};
+        String[] filterStrings = {"ID", "First Name", "Last Name", "Position", "Experience", "Salary"};
         JComboBox<String> filterBox = new JComboBox<>(filterStrings);
 
         JTextField filterField = new HintTextField("Enter filter here");
@@ -61,7 +61,7 @@ public class GUIEmpList extends JFrame {
                     sorter.setRowFilter(null);
                 } else {
                     String regex = String.format("^%s$", text);
-                    RowFilter<EmployeesData, Object> rf = RowFilter.regexFilter("(?i)" + regex, filterBox.getSelectedIndex());
+                    RowFilter<EmpModel, Object> rf = RowFilter.regexFilter("(?i)" + regex, filterBox.getSelectedIndex());
                     sorter.setRowFilter(rf);
                 }
             }
@@ -78,17 +78,17 @@ public class GUIEmpList extends JFrame {
 
 
         //Greater than
-        RowFilter<EmployeesData, Integer> greaterThan = new RowFilter<>() {
+        RowFilter<EmpModel, Integer> greaterThan = new RowFilter<>() {
             @Override
-            public boolean include(Entry<? extends EmployeesData, ? extends Integer> entry) {
+            public boolean include(Entry<? extends EmpModel, ? extends Integer> entry) {
                 return (int) table.getValueAt(entry.getIdentifier(), 5) > Integer.parseInt(searchField.getText());
             }
         };
 
         //Less than
-        RowFilter<EmployeesData, Integer> lessThan = new RowFilter<>() {
+        RowFilter<EmpModel, Integer> lessThan = new RowFilter<>() {
             @Override
-            public boolean include(Entry<? extends EmployeesData, ? extends Integer> entry) {
+            public boolean include(Entry<? extends EmpModel, ? extends Integer> entry) {
                 return (int) table.getValueAt(entry.getIdentifier(), 5) < Integer.parseInt(searchField.getText());
             }
         };
@@ -121,7 +121,7 @@ public class GUIEmpList extends JFrame {
         setSize(455, 735);
     }
 
-    private void editMode(EmployeesData employeesData) {
+    private void editMode(EmpModel empModel) {
         JPanel activePanel = new JPanel();
         activePanel.setLayout(new GridLayout(0, 1, 15, 15));
         JTextField[] textFields = new JTextField[6];
@@ -129,7 +129,7 @@ public class GUIEmpList extends JFrame {
         textFields[0] = new HintTextField("Enter ID");
         textFields[1] = new HintTextField("Enter Name");
         textFields[2] = new HintTextField("Enter Family Name");
-        textFields[3] = new HintTextField("Enter model.Position");
+        textFields[3] = new HintTextField("Enter Position");
         textFields[4] = new HintTextField("Enter Experience");
         textFields[5] = new HintTextField("Enter Salary");
 
@@ -152,12 +152,12 @@ public class GUIEmpList extends JFrame {
                     Position position = Position.valueOf(empInStr[3]);
                     int salary = Integer.parseInt(empInStr[5]);
                     if (!(salary >= position.getMinSalary() && salary <= position.getMaxSalary())) {
-                        JOptionPane.showMessageDialog(null, "Valid Salary for this model.Position : From " + position.getMinSalary() + " To " + position.getMaxSalary());
+                        JOptionPane.showMessageDialog(null, "Valid Salary for this Position : From " + position.getMinSalary() + " To " + position.getMaxSalary());
                     } else {
                         Employee emp = Employee.getEmpFromStringArray(empInStr);
 
-                        employeesData.editEmp(employeesData.findEmpIndex(Integer.parseInt(textFields[0].getText())), emp);
-                        employeesData.fireTableStructureChanged();
+                        empModel.editEmp(empModel.findEmpIndex(Integer.parseInt(textFields[0].getText())), emp);
+                        empModel.fireTableStructureChanged();
                     }
                 } catch (IllegalArgumentException | NullPointerException ex) {
                     JOptionPane.showMessageDialog(null, "Incorrect Data", "Alert", JOptionPane.WARNING_MESSAGE);
@@ -170,20 +170,20 @@ public class GUIEmpList extends JFrame {
         setSize(455, 775);
     }
 
-    private void removeMode(EmployeesData employeesData) {
+    private void removeMode(EmpModel empModel) {
         JPanel activePanel = new JPanel();
         activePanel.setLayout(new GridLayout(0, 1, 15, 15));
         JTextField idField = new HintTextField("Here enter emp ID");
 
-        JButton removeButton = new JButton("Remove model.Employee");
+        JButton removeButton = new JButton("Remove Employee");
         removeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int id;
                 try {
                     id = Integer.parseInt(idField.getText());
-                    employeesData.removeEmp(employeesData.findEmpIndex(id));
-                    employeesData.fireTableStructureChanged();
+                    empModel.removeEmp(empModel.findEmpIndex(id));
+                    empModel.fireTableStructureChanged();
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "Incorrect number", "Alert", JOptionPane.WARNING_MESSAGE);
                 }
@@ -196,28 +196,15 @@ public class GUIEmpList extends JFrame {
         setSize(455, 570);
     }
 
-    private void addMode(EmployeesData employeesData) {
+    private void addMode(EmpModel empModel) {
         String name = JOptionPane.showInputDialog(this, "Enter First Name");
         String lastName = JOptionPane.showInputDialog(this, "Enter Last Name");
         Position position = parseValidPosition();
-        int exp = parseValidInt("Enter Experience");
+        int exp = parseValidInt("Enter Experience", null);
         int salary = parseValidInt("Enter Salary between " + position.getMinSalary() + " and " + position.getMaxSalary(), position);
 
-        employeesData.addEmp(new Employee(name, lastName, position, exp, salary));
-        JOptionPane.showMessageDialog(this, "model.Employee Successfully Added !");
-    }
-
-    private static int parseValidInt(String message) {
-        int errorCounter = 0;
-        int output = 0;
-        while (errorCounter != 1)
-            try {
-                output = Integer.parseInt(JOptionPane.showInputDialog(null, message));
-                errorCounter++;
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Incorrect value! \nPlease try again.", "Alert", JOptionPane.WARNING_MESSAGE);
-            }
-        return output;
+        empModel.addEmp(new Employee(name, lastName, position, exp, salary));
+        JOptionPane.showMessageDialog(this, "Employee Successfully Added !");
     }
 
     private static int parseValidInt(String message, Position position) {
@@ -227,7 +214,7 @@ public class GUIEmpList extends JFrame {
             try {
                 output = Integer.parseInt(JOptionPane.showInputDialog(null, message));
                 errorCounter++;
-                if (!(output >= position.getMinSalary() && output <= position.getMaxSalary())) {
+                if (position != null && !(output >= position.getMinSalary() && output <= position.getMaxSalary())) {
                     JOptionPane.showMessageDialog(null, "Incorrect value! \nPlease try again.", "Alert", JOptionPane.WARNING_MESSAGE);
                     errorCounter--;
                 }
@@ -242,7 +229,7 @@ public class GUIEmpList extends JFrame {
         Position position = null;
         while (errorCounter != 1) {
             try {
-                position = Position.valueOf(JOptionPane.showInputDialog(null, "Enter model.Position" + '\n' + "MANAGER, ASSISTANT, DESIGNER, ACCOUNTANT, PR, CEO").toUpperCase());
+                position = Position.valueOf(JOptionPane.showInputDialog(null, "Enter Position" + '\n' + "MANAGER, ASSISTANT, DESIGNER, ACCOUNTANT, PR, CEO").toUpperCase());
                 errorCounter++;
             } catch (IllegalArgumentException | NullPointerException e) {
                 JOptionPane.showMessageDialog(null, "Incorrect value! \nPlease try again.", "Alert", JOptionPane.WARNING_MESSAGE);
@@ -251,13 +238,13 @@ public class GUIEmpList extends JFrame {
         return position;
     }
 
-    private void drawTableModel(EmployeesData employeesData) {
+    private void drawTableModel(EmpModel empModel) {
         JPanel panel = new JPanel();
         backButton = new JButton("Back to menu");
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GUI.showGUI(employeesData);
+                GUI.showGUI(empModel);
                 dispose();
             }
         });
@@ -278,7 +265,7 @@ public class GUIEmpList extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                GUI.showGUI(employeesData);
+                GUI.showGUI(empModel);
                 dispose();
             }
         });
