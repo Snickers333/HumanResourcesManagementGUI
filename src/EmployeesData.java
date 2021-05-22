@@ -1,3 +1,6 @@
+import model.Employee;
+import model.Position;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.AbstractTableModel;
@@ -7,7 +10,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class EmpModel extends AbstractTableModel {
-    private final String[] headers = {"ID", "First Name", "Last Name", "Position", "Experience", "Salary"};
+    private final String[] headers = {"ID", "First Name", "Last Name", "model.Position", "Experience", "Salary"};
 
     private List<Employee> list;
 

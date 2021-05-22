@@ -1,3 +1,5 @@
+package model;
+
 public enum Position {
     MANAGER(3800, 2500),
     ASSISTANT(2400, 1400),
