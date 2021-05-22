@@ -10,70 +10,70 @@ public class GUI {
     }
 
     public static void startGUI() {
-        EmpModel empModel = new EmpModel();
-        empModel.getEmpListFromFile(new File("Data.txt"));
+        EmployeesData employeesData = new EmployeesData();
+        employeesData.getEmpListFromFile(new File("Data.txt"));
 
-        showGUI(empModel);
+        showGUI(employeesData);
     }
 
-    static void showGUI(EmpModel empModel) {
+    static void showGUI(EmployeesData employeesData) {
         JFrame mainFrame = new JFrame("Menu");
         // Button showing another JFrame with list of all Employees
-        JButton showListButton = new JButton("Show Employee List");
+        JButton showListButton = new JButton("Show model.Employee List");
 
         showListButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GUIEmpList(empModel, 0);
+                new GUIEmpList(employeesData, 0);
                 mainFrame.dispose();
             }
         });
 
-        JButton addEmpButton = new JButton("Add Employee");
+        JButton addEmpButton = new JButton("Add model.Employee");
         addEmpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GUIEmpList(empModel, 3);
+                new GUIEmpList(employeesData, 3);
             }
         });
 
-        JButton saveButton = new JButton("Save Employee List");
+        JButton saveButton = new JButton("Save model.Employee List");
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                empModel.saveEmpListToFile();
+                employeesData.saveEmpListToFile();
             }
         });
 
-        JButton loadButton = new JButton("Load Employee List");
+        JButton loadButton = new JButton("Load model.Employee List");
         loadButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 File file;
                 try {
-                    file = EmpModel.getSelectedFile();
+                    file = EmployeesData.getSelectedFile();
                     if (file != null)
-                        empModel.removeAll();
-                    empModel.getEmpListFromFile(file);
+                        employeesData.removeAll();
+                    employeesData.getEmpListFromFile(file);
                 } catch (NullPointerException ignored) {
                 }
             }
         });
 
-        JButton editEmpButton = new JButton("Edit Employee");
+        JButton editEmpButton = new JButton("Edit model.Employee");
         editEmpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GUIEmpList(empModel, 1);
+                new GUIEmpList(employeesData, 1);
                 mainFrame.dispose();
             }
         });
 
-        JButton removeEmpButton = new JButton("Remove Employee");
+        JButton removeEmpButton = new JButton("Remove model.Employee");
         removeEmpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GUIEmpList(empModel, 2);
+                new GUIEmpList(employeesData, 2);
                 mainFrame.dispose();
             }
         });
