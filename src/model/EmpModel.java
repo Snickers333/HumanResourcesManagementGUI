@@ -99,7 +99,8 @@ public class EmpModel extends AbstractTableModel {
     }
 
     public void editEmp(int index, Employee emp) {
-        this.list.set(index, emp);
+        if (!(index == -1))
+            this.list.set(index, emp);
     }
 
     public void removeEmp(int index) {
